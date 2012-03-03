@@ -1,11 +1,12 @@
 package com.dumptruckman.minecraft.matchmaker;
 
-import com.dumptruckman.minecraft.config.Entries;
-import com.dumptruckman.minecraft.plugin.AbstractBukkitPlugin;
+import com.dumptruckman.minecraft.pluginbase.config.Entries;
 import com.dumptruckman.minecraft.matchmaker.api.Config;
 import com.dumptruckman.minecraft.matchmaker.api.MatchMaker;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
+import com.dumptruckman.minecraft.pluginbase.plugin.AbstractBukkitPlugin;
+
 
 import java.io.IOException;
 import java.util.Arrays;

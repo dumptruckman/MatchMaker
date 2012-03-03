@@ -79,28 +79,6 @@ and adjust the build number accordingly -->
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>maven-replacer-plugin</artifactId>
-                <version>1.3.8</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <file>target/classes/plugin.yml</file>
-                    <replacements>
-                        <replacement>
-                            <token>maven-version-number</token>
-                            <value>${project.version}-b${project.build.number}</value>
-                        </replacement>
-                    </replacements>
-                </configuration>
-            </plugin>
             <!-- Maven Source Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -136,7 +114,7 @@ and adjust the build number accordingly -->
                     <configLocation>${project.basedir}/config/checks.xml</configLocation>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>1.5</version>
@@ -149,19 +127,19 @@ and adjust the build number accordingly -->
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.dumptruckman:PluginBase</include>
+                                    <include>com.dumptruckman.minecraft:Plugin</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.dumptruckman.tools</pattern>
+                                    <pattern>com.dumptruckman.minecraft.pluginbase</pattern>
                                     <shadedPattern>com.dumptruckman.minecraft.matchmaker.pluginbase</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin-->
         </plugins>
     </build>
     <dependencies>
@@ -176,7 +154,7 @@ and adjust the build number accordingly -->
         <!-- Start of PluginBase Dependency -->
         <dependency>
             <groupId>com.dumptruckman.minecraft</groupId>
-            <artifactId>BukkitPlugin</artifactId>
+            <artifactId>Plugin</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>

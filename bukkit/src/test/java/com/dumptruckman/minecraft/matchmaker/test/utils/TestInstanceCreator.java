@@ -7,8 +7,7 @@
 
 package com.dumptruckman.minecraft.matchmaker.test.utils;
 
-import com.dumptruckman.minecraft.plugin.AbstractBukkitPlugin;
-import com.dumptruckman.minecraft.util.FileUtils;
+import com.dumptruckman.minecraft.pluginbase.util.FileUtils;
 import com.dumptruckman.minecraft.matchmaker.MatchMakerPlugin;
 import junit.framework.Assert;
 import org.bukkit.Bukkit;
@@ -45,7 +44,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class TestInstanceCreator {
-    private AbstractBukkitPlugin plugin;
+    private MatchMakerPlugin plugin;
     private Server mockServer;
     private CommandSender commandSender;
 
@@ -67,7 +66,7 @@ public class TestInstanceCreator {
             doReturn(pluginDirectory).when(plugin).getDataFolder();
 
             // Return a fake PDF file.
-            PluginDescriptionFile pdf = new PluginDescriptionFile("MatchMaker", "2.0",
+            PluginDescriptionFile pdf = new PluginDescriptionFile("MatchMaker", "dev",
                     "com.dumptruckman.minecraft.matchmaker.MatchMakerPlugin");
             doReturn(pdf).when(plugin).getDescription();
             doReturn(true).when(plugin).isEnabled();
@@ -261,7 +260,7 @@ public class TestInstanceCreator {
         return true;
     }
 
-    public AbstractBukkitPlugin getPlugin() {
+    public MatchMakerPlugin getPlugin() {
         return this.plugin;
     }
 

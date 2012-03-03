@@ -1,6 +1,6 @@
 package com.dumptruckman.minecraft.matchmaker.util;
 
-import com.dumptruckman.minecraft.permission.Perm;
+import com.dumptruckman.minecraft.pluginbase.permission.Perm;
 
 public class Perms {
 

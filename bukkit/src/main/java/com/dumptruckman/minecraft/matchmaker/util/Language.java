@@ -1,6 +1,6 @@
 package com.dumptruckman.minecraft.matchmaker.util;
 
-import com.dumptruckman.minecraft.locale.Message;
+import com.dumptruckman.minecraft.pluginbase.locale.Message;
 
 public class Language {
 

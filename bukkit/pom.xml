@@ -149,12 +149,13 @@ and adjust the build number accordingly -->
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.dumptruckman:PluginBase</include>
+                                    <include>com.dumptruckman.minecraft:BukkitPlugin</include>
+                                    <include>com.dumptruckman.minecraft:MatchMakerAPI</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.dumptruckman.tools</pattern>
+                                    <pattern>com.dumptruckman.minecraft.pluginbase</pattern>
                                     <shadedPattern>com.dumptruckman.minecraft.matchmaker.pluginbase</shadedPattern>
                                 </relocation>
                             </relocations>
@@ -165,6 +166,14 @@ and adjust the build number accordingly -->
         </plugins>
     </build>
     <dependencies>
+        <!-- MatchMakerAPI Dependency -->
+        <dependency>
+            <groupId>com.dumptruckman.minecraft</groupId>
+            <artifactId>MatchMakerAPI</artifactId>
+            <version>dev-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
         <!-- Bukkit Dependency -->
         <dependency>
             <groupId>org.bukkit</groupId>
