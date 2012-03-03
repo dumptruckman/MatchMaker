@@ -1,7 +1,7 @@
 package com.dumptruckman.minecraft.matchmaker;
 
+import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.dumptruckman.minecraft.pluginbase.config.Entries;
-import com.dumptruckman.minecraft.matchmaker.api.Config;
 import com.dumptruckman.minecraft.matchmaker.api.MatchMaker;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;

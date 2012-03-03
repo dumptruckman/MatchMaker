@@ -25,6 +25,11 @@
             <id>onarandombox</id>
             <url>http://repo.onarandombox.com/content/groups/public/</url>
         </repository>
+        <!-- Repository for zml's stuff -->
+        <repository>
+            <id>zml-repo</id>
+            <url>http://files.zachsthings.com/repo</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -143,6 +148,12 @@ and adjust the build number accordingly -->
         </plugins>
     </build>
     <dependencies>
+        <!-- WorldEdit (Required) -->
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldedit</artifactId>
+            <version>5.3-SNAPSHOT</version>
+        </dependency>
         <!-- Start of PluginBase Dependency -->
         <dependency>
             <groupId>com.dumptruckman.minecraft</groupId>
