@@ -143,14 +143,6 @@ and adjust the build number accordingly -->
         </plugins>
     </build>
     <dependencies>
-        <!-- Bukkit Dependency -->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.2.3-R0.1-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
         <!-- Start of PluginBase Dependency -->
         <dependency>
             <groupId>com.dumptruckman.minecraft</groupId>
