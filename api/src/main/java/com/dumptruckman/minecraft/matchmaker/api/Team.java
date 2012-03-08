@@ -4,6 +4,7 @@ import com.dumptruckman.minecraft.matchmaker.api.config.TeamConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.TeamRecord;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a team of players for pvp matches.
@@ -21,6 +22,10 @@ public interface Team {
      * @return A list of the team's members.
      */
     List<TeamMember> getMembers();
+    
+    Set<TeamMember> getCaptains();
+    
+    Set<TeamMember> getManagers();
     
     TeamConfig config();
     
