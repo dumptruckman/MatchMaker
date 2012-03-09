@@ -1,13 +1,13 @@
 package com.dumptruckman.minecraft.matchmaker;
 
 import com.dumptruckman.minecraft.matchmaker.api.config.Config;
-import com.dumptruckman.minecraft.pluginbase.config.Entries;
 import com.dumptruckman.minecraft.matchmaker.api.MatchMaker;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
 import com.dumptruckman.minecraft.pluginbase.plugin.AbstractBukkitPlugin;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +18,6 @@ public class MatchMakerPlugin extends AbstractBukkitPlugin<Config> implements Ma
     
     public void preEnable() {
         Language.init();
-        Entries.registerConfig(Config.class);
-        Entries.registerConfig(YamlConfig.class);
     }
 
     public void postEnable() {
@@ -36,6 +34,6 @@ public class MatchMakerPlugin extends AbstractBukkitPlugin<Config> implements Ma
 
     @Override
     protected Config newConfigInstance() throws IOException {
-        return new YamlConfig(this);
+        return new YamlConfig(this, true, new File(getDataFolder(), "config.yml"), Config.class, YamlConfig.class);
     }
 }
