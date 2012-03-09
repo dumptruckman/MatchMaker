@@ -4,45 +4,78 @@ import com.dumptruckman.minecraft.matchmaker.api.Arena;
 import com.dumptruckman.minecraft.matchmaker.api.ArenaMap;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
+import com.dumptruckman.minecraft.pluginbase.config.Config;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.LocalWorld;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.Vector2D;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.sk89q.worldedit.regions.RegionOperationException;
 
 import java.util.Iterator;
 import java.util.Set;
 
 class DefaultArena implements Arena {
+    
+    private String name;
+    private ArenaMap map = null;
+    
+    private Config<ArenaConfig> config;
+    private Config<ArenaRecord> record;
+    
+    private Vector min;
+    private Vector max;
+
+    DefaultArena(String name, Selection selection, Config<ArenaConfig> config, Config<ArenaRecord> record) {
+        this.name = name;
+        this.config = config;
+        this.record = record;
+        config.set(ArenaConfig.MIN_POINT, selection.getNativeMinimumPoint());
+        config.set(ArenaConfig.MAX_POINT, selection.getNativeMaximumPoint());
+        
+        reloadFromConfig();
+    }
+
+    private void reloadFromConfig() {
+        this.min = config.get(ArenaConfig.MIN_POINT);
+        this.max = config.get(ArenaConfig.MAX_POINT);
+    }
 
     @Override
     public String getName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return name;
     }
 
     @Override
     public void setName(String name) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        this.name = name;
     }
 
     @Override
     public ArenaMap getMap() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return map;
     }
 
     @Override
     public void setMap(ArenaMap map) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        this.map = map;
     }
 
     @Override
-    public ArenaConfig config() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Config<ArenaConfig> config() {
+        return config;
     }
 
     @Override
-    public ArenaRecord record() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Config<ArenaRecord> record() {
+        return record;
+    }
+
+    @Override
+    public void refresh() {
+        reloadFromConfig();
     }
 
     @Override
@@ -76,31 +109,6 @@ class DefaultArena implements Arena {
     }
 
     @Override
-    public void expand(Vector vector) throws RegionOperationException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void expand(Vector... vectors) throws RegionOperationException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void contract(Vector vector) throws RegionOperationException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void contract(Vector... vectors) throws RegionOperationException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void shift(Vector vector) throws RegionOperationException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public boolean contains(Vector vector) {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -111,13 +119,13 @@ class DefaultArena implements Arena {
     }
 
     @Override
-    public LocalWorld getWorld() {
+    public String getWorld() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void setWorld(LocalWorld localWorld) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void setWorld(String localWorld) {
+
     }
 
     @Override

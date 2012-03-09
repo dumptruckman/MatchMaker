@@ -1,6 +1,9 @@
 package com.dumptruckman.minecraft.matchmaker;
 
 import com.dumptruckman.minecraft.matchmaker.api.Arena;
+import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
+import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
+import com.dumptruckman.minecraft.pluginbase.config.Config;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import java.util.Iterator;
@@ -9,6 +12,10 @@ import java.util.Set;
 public class Arenas implements Iterable<Arena> {
 
     private Set<Arena> arenas;
+    
+    void add(Arena arena) {
+        arenas.add(arena);
+    }
 
     @Override
     public Iterator<Arena> iterator() {
@@ -35,7 +42,7 @@ public class Arenas implements Iterable<Arena> {
         }
     }
     
-    static Arena newArena(String name, Selection selection) throws IllegalArgumentException {
-        return new DefaultArena();
+    static Arena newArena(String name, Selection selection, Config<ArenaConfig> config, Config<ArenaRecord> record) throws IllegalArgumentException {
+        return new DefaultArena(name, selection, config, record);
     }
 }

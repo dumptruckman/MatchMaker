@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.List;
 
 public class CreateArenaCommand extends MMCommand {
@@ -41,6 +42,9 @@ public class CreateArenaCommand extends MMCommand {
             arena = plugin.getArenaManager().newArena(args.get(0), selection);
         } catch (IllegalArgumentException e) {
             messager.sendMessage(sender, e.getMessage());
+            return;
+        } catch (IOException e) {
+            messager.bad(Language.CMD_CREATE_ARENA_FILE_ISSUE, sender, e.getMessage());
             return;
         }
         messager.good(Language.CMD_CREATE_ARENA_SUCCESS, sender, arena.getName());

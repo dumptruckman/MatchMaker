@@ -2,10 +2,17 @@ package com.dumptruckman.minecraft.matchmaker;
 
 import com.dumptruckman.minecraft.matchmaker.api.Arena;
 import com.dumptruckman.minecraft.matchmaker.api.ArenaManager;
+import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
+import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
+import com.dumptruckman.minecraft.matchmaker.util.OtherConfig;
+import com.dumptruckman.minecraft.pluginbase.config.Config;
 import com.dumptruckman.minecraft.pluginbase.locale.Messager;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
+
+import java.io.File;
+import java.io.IOException;
 
 class DefaultArenaManager implements ArenaManager {
 
@@ -43,7 +50,7 @@ class DefaultArenaManager implements ArenaManager {
         return null;
     }
 
-    public Arena newArena(String name, Selection selection) throws IllegalArgumentException {
+    public Arena newArena(String name, Selection selection) throws IllegalArgumentException, IOException {
         Messager messager = matchMaker.getMessager();
         if (getArena(name) != null) {
             throw new IllegalArgumentException(messager.getMessage(Language.CMD_CREATE_ARENA_EXISTING_NAME, name));
@@ -55,6 +62,12 @@ class DefaultArenaManager implements ArenaManager {
         if (existingArena != null) {
             throw new IllegalArgumentException(messager.getMessage(Language.CMD_CREATE_ARENA_EXISTING_LOCATION, existingArena.getName()));
         }
-        return Arenas.newArena(name, selection);
+        Arena arena = Arenas.newArena(name, selection,
+                new OtherConfig<ArenaConfig>(matchMaker, false, new File(
+                        matchMaker.getArenasFolder(), name + "-config.yml"), ArenaConfig.class),
+                new OtherConfig<ArenaRecord>(matchMaker, false, new File(
+                        matchMaker.getArenasFolder(), name + "-record.yml"), ArenaRecord.class));
+        arenas.add(arena);
+        return arena;
     }
 }
