@@ -5,4 +5,5 @@ import com.dumptruckman.minecraft.pluginbase.plugin.PluginBase;
 
 public interface MatchMaker<C extends BaseConfig> extends PluginBase<C> {
 
+    ArenaManager getArenaManager();
 }

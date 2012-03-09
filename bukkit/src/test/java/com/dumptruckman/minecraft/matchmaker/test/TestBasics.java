@@ -7,10 +7,10 @@
 
 package com.dumptruckman.minecraft.matchmaker.test;
 
+import com.dumptruckman.minecraft.matchmaker.api.config.MatchConfig;
 import com.dumptruckman.minecraft.pluginbase.config.BaseConfig;
 import com.dumptruckman.minecraft.matchmaker.MatchMakerPlugin;
 import com.dumptruckman.minecraft.matchmaker.api.MatchMaker;
-import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.test.utils.TestInstanceCreator;
 import junit.framework.Assert;
 import org.bukkit.Server;
@@ -91,5 +91,13 @@ public class TestBasics {
         Assert.assertEquals(Locale.CANADA, myPlugin.config().get(BaseConfig.LOCALE));
         
         myPlugin.config().save();
+        
+        boolean throwsException = false;
+        try {
+            myPlugin.config().get(MatchConfig.MAX_LIVES);
+        } catch (IllegalArgumentException ignore) {
+            throwsException = true;
+        }
+        Assert.assertTrue(throwsException);
     }
 }

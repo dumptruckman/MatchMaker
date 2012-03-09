@@ -2,6 +2,7 @@ name: MatchMaker
 main: com.dumptruckman.minecraft.matchmaker.MatchMakerPlugin
 version: maven-version-number
 author: dumptruckman
+depend: [WorldEdit]
 
 commands:
   match:

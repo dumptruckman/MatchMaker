@@ -4,6 +4,8 @@ import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.sk89q.worldedit.regions.Region;
 
+import java.util.Iterator;
+
 /**
  * Represents a single Arena location in the world.
  */
