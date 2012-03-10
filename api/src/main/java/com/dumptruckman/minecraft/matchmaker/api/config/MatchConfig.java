@@ -1,7 +1,6 @@
 package com.dumptruckman.minecraft.matchmaker.api.config;
 
 import com.dumptruckman.minecraft.pluginbase.config.ConfigEntry;
-import com.dumptruckman.minecraft.pluginbase.config.Config;
 import com.dumptruckman.minecraft.pluginbase.config.SimpleConfigEntry;
 
 /**

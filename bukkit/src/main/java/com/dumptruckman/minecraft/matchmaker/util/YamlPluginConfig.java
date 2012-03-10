@@ -23,11 +23,6 @@ public class YamlPluginConfig extends AbstractYamlConfig<MMConfig> implements MM
         super(plugin, doComments, configFile, configClasses);
     }
 
-    @Override
-    protected ConfigEntry getSettingsEntry() {
-        return SETTINGS;
-    }
-    
     protected String getHeader() {
         return "# === [ MatchMaker Config ] ===";
     }

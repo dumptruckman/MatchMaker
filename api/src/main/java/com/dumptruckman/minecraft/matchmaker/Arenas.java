@@ -3,7 +3,7 @@ package com.dumptruckman.minecraft.matchmaker;
 import com.dumptruckman.minecraft.matchmaker.api.Arena;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
-import com.dumptruckman.minecraft.pluginbase.config.Config;
+import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
 import java.util.Iterator;

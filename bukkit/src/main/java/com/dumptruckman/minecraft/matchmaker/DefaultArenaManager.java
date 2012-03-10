@@ -5,8 +5,7 @@ import com.dumptruckman.minecraft.matchmaker.api.ArenaManager;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
-import com.dumptruckman.minecraft.matchmaker.util.OtherConfig;
-import com.dumptruckman.minecraft.pluginbase.config.Config;
+import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
 import com.dumptruckman.minecraft.pluginbase.locale.Messager;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
@@ -63,9 +62,9 @@ class DefaultArenaManager implements ArenaManager {
             throw new IllegalArgumentException(messager.getMessage(Language.CMD_CREATE_ARENA_EXISTING_LOCATION, existingArena.getName()));
         }
         Arena arena = Arenas.newArena(name, selection,
-                new OtherConfig<ArenaConfig>(matchMaker, false, new File(
+                new YamlConfig<ArenaConfig>(matchMaker, false, new File(
                         matchMaker.getArenasFolder(), name + "-config.yml"), ArenaConfig.class),
-                new OtherConfig<ArenaRecord>(matchMaker, false, new File(
+                new YamlConfig<ArenaRecord>(matchMaker, false, new File(
                         matchMaker.getArenasFolder(), name + "-record.yml"), ArenaRecord.class));
         arenas.add(arena);
         return arena;

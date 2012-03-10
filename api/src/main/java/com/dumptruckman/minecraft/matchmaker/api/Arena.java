@@ -2,11 +2,10 @@ package com.dumptruckman.minecraft.matchmaker.api;
 
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
-import com.dumptruckman.minecraft.pluginbase.config.Config;
+import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.Vector2D;
-import com.sk89q.worldedit.regions.Region;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -24,9 +23,9 @@ public interface Arena {
     
     void setMap(ArenaMap map);
     
-    Config config();
+    Config<ArenaConfig> config();
     
-    Config record();
+    Config<ArenaRecord> record();
 
     /**
      * Re-caches the Arena data from persistence.
