@@ -12,6 +12,7 @@ import com.dumptruckman.minecraft.pluginbase.config.BaseConfig;
 import com.dumptruckman.minecraft.matchmaker.MatchMakerPlugin;
 import com.dumptruckman.minecraft.matchmaker.api.MatchMaker;
 import com.dumptruckman.minecraft.matchmaker.test.utils.TestInstanceCreator;
+import com.dumptruckman.minecraft.pluginbase.plugin.AbstractBukkitPlugin;
 import junit.framework.Assert;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -33,7 +34,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ MatchMakerPlugin.class })
+@PrepareForTest({ MatchMakerPlugin.class, AbstractBukkitPlugin.class})
 public class TestBasics {
     TestInstanceCreator creator;
     Server mockServer;
@@ -56,7 +57,7 @@ public class TestBasics {
     public void testEnableDebugMode() {
         // Pull a core instance from the server.
         Plugin plugin = mockServer.getPluginManager().getPlugin("MatchMaker");
-        MatchMaker myPlugin = (MatchMaker) plugin;
+        MatchMakerPlugin myPlugin = (MatchMakerPlugin) plugin;
 
         // Make sure Core is not null
         assertNotNull(plugin);
@@ -76,11 +77,11 @@ public class TestBasics {
         Assert.assertEquals(0, (int) myPlugin.config().get(BaseConfig.DEBUG_MODE));
 
         // Send the debug command.
-        String[] debugArgs = new String[] { "debug", "3" };
-        plugin.onCommand(mockCommandSender, mockCommand, "", debugArgs);
+        String[] cmdArgs = new String[] { "debug", "3" };
+        myPlugin.onCommand(mockCommandSender, mockCommand, "", cmdArgs);
 
-        String[] reloadArgs = new String[] { "reload" };
-        plugin.onCommand(mockCommandSender, mockCommand, "", reloadArgs);
+        cmdArgs = new String[] { "reload" };
+        myPlugin.onCommand(mockCommandSender, mockCommand, "", cmdArgs);
 
         Assert.assertEquals(3, (int) myPlugin.config().get(BaseConfig.DEBUG_MODE));
 
@@ -99,5 +100,14 @@ public class TestBasics {
             throwsException = true;
         }
         Assert.assertTrue(throwsException);
+
+        cmdArgs = new String[] {  };
+        plugin.onCommand(mockCommandSender, mockCommand, "", cmdArgs);
+
+        cmdArgs = new String[] { "help" };
+        plugin.onCommand(mockCommandSender, mockCommand, "", cmdArgs);
+
+        cmdArgs = new String[] { "create", "arena", "poop" };
+        plugin.onCommand(mockCommandSender, mockCommand, "", cmdArgs);
     }
 }

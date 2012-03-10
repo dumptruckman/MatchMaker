@@ -7,10 +7,12 @@ import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
 import com.dumptruckman.minecraft.pluginbase.locale.Messager;
+import com.dumptruckman.minecraft.pluginbase.util.Logging;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
-import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.regions.Region;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 class DefaultArenaManager implements ArenaManager {
@@ -36,37 +38,58 @@ class DefaultArenaManager implements ArenaManager {
         return arenas;
     }
 
-    public Arena getIntersectingArena(Selection selection) {
+    public Arena getIntersectingArena(Region region) {
         for (Arena arena : getArenas()) {
-            if (!arena.getWorld().equals(selection.getWorld())) {
+            if (!arena.getWorld().equals(region.getWorld().getName())) {
                 continue;
             }
-            if (selection.getNativeMaximumPoint().containedWithin(arena.getMinimumPoint(), arena.getMaximumPoint())
-                || selection.getNativeMinimumPoint().containedWithin(arena.getMinimumPoint(), arena.getMaximumPoint())) {
+            if (region.getMaximumPoint().containedWithin(arena.getMinimumPoint(), arena.getMaximumPoint())
+                || region.getMinimumPoint().containedWithin(arena.getMinimumPoint(), arena.getMaximumPoint())) {
                 return arena;
             }
         }
         return null;
     }
 
-    public Arena newArena(String name, Selection selection) throws IllegalArgumentException, IOException {
+    public Arena newArena(String name, Region region) throws IllegalArgumentException, IOException {
         Messager messager = matchMaker.getMessager();
         if (getArena(name) != null) {
             throw new IllegalArgumentException(messager.getMessage(Language.CMD_CREATE_ARENA_EXISTING_NAME, name));
         }
-        if (!(selection instanceof CuboidSelection)) {
-            throw new IllegalArgumentException(messager.getMessage(Language.CMD_CREATE_ARENA_CUBOID_ONLY));
-        }
-        Arena existingArena = matchMaker.getArenaManager().getIntersectingArena(selection);
+        Arena existingArena = matchMaker.getArenaManager().getIntersectingArena(region);
         if (existingArena != null) {
             throw new IllegalArgumentException(messager.getMessage(Language.CMD_CREATE_ARENA_EXISTING_LOCATION, existingArena.getName()));
         }
-        Arena arena = Arenas.newArena(name, selection,
+        File arenaRecords = new File(matchMaker.getArenasFolder(), "records");
+        Arena arena = Arenas.newArena(name, region,
                 new YamlConfig<ArenaConfig>(matchMaker, false, new File(
-                        matchMaker.getArenasFolder(), name + "-config.yml"), ArenaConfig.class),
+                        matchMaker.getArenasFolder(), name + ".yml"), ArenaConfig.class),
                 new YamlConfig<ArenaRecord>(matchMaker, false, new File(
-                        matchMaker.getArenasFolder(), name + "-record.yml"), ArenaRecord.class));
+                        arenaRecords, name + ".yml"), ArenaRecord.class));
         arenas.add(arena);
         return arena;
+    }
+
+    public void loadArenas() throws IOException {
+        arenas.clear();
+        File arenaFolder = matchMaker.getArenasFolder();
+        if (!arenaFolder.exists()) {
+            Logging.info("No arenas to load.");
+            return;
+        }
+        File recordsFolder = new File(arenaFolder, "records");
+        for (File file : arenaFolder.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isFile() && pathname.getName().endsWith(".yml");
+            }
+        })) {
+            File recordFile = new File(recordsFolder, file.getName());
+            Arena arena = Arenas.newArena(new YamlConfig<ArenaConfig>(matchMaker, false, file, ArenaConfig.class),
+                    new YamlConfig<ArenaRecord>(matchMaker, false, recordFile, ArenaRecord.class));
+            arenas.add(arena);
+            Logging.finer("Loaded arena: " + arena);
+        }
+        Logging.info("Loaded " + arenas.size() + " arenas!");
     }
 }

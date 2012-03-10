@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Represents a single Arena location in the world.
  */
-public interface Arena {
+public interface Arena extends Iterable<BlockVector> {
     
     String getName();
     
@@ -28,9 +28,11 @@ public interface Arena {
     Config<ArenaRecord> record();
 
     /**
-     * Re-caches the Arena data from persistence.
+     * Saves the Arena data to database.
+     *
+     * @return True if saved successfully.
      */
-    void refresh();
+    void save();
 
     public Vector getMinimumPoint();
 

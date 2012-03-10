@@ -8,10 +8,16 @@ import com.sk89q.worldedit.Vector;
  * Contains the configuration for a single arena.
  */
 public interface ArenaConfig extends Config<ArenaConfig> {
+    
+    ConfigEntry<String> NAME = new SimpleConfigEntry<String>(String.class, "name", null);
 
-    ConfigEntry<Vector> MIN_POINT = new VectorEntry("location.min_point", null);
+    ConfigEntry<Integer> MIN_X = new SimpleConfigEntry<Integer>(Integer.class, "location.min.x", null);
+    ConfigEntry<Integer> MIN_Y = new SimpleConfigEntry<Integer>(Integer.class, "location.min.y", null);
+    ConfigEntry<Integer> MIN_Z = new SimpleConfigEntry<Integer>(Integer.class, "location.min.z", null);
 
-    ConfigEntry<Vector> MAX_POINT = new VectorEntry("location.max_point", null);
+    ConfigEntry<Integer> MAX_X = new SimpleConfigEntry<Integer>(Integer.class, "location.max.x", null);
+    ConfigEntry<Integer> MAX_Y = new SimpleConfigEntry<Integer>(Integer.class, "location.max.y", null);
+    ConfigEntry<Integer> MAX_Z = new SimpleConfigEntry<Integer>(Integer.class, "location.max.z", null);
     
     ConfigEntry<String> WORLD = new SimpleConfigEntry<String>(String.class, "location.world", null);
 }

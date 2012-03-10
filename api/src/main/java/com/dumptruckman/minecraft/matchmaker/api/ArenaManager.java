@@ -1,7 +1,7 @@
 package com.dumptruckman.minecraft.matchmaker.api;
 
 import com.dumptruckman.minecraft.matchmaker.Arenas;
-import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.regions.Region;
 
 import java.io.IOException;
 
@@ -11,7 +11,9 @@ public interface ArenaManager {
 
     Arenas getArenas();
 
-    Arena getIntersectingArena(Selection selection);
+    Arena getIntersectingArena(Region region);
 
-    public Arena newArena(String name, Selection selection) throws IllegalArgumentException, IOException;
+    Arena newArena(String name, Region region) throws IllegalArgumentException, IOException;
+    
+    void loadArenas() throws IOException;
 }

@@ -4,7 +4,11 @@ import com.dumptruckman.minecraft.matchmaker.MatchMakerPlugin;
 import com.dumptruckman.minecraft.matchmaker.api.Arena;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.Perms;
+import com.dumptruckman.minecraft.pluginbase.util.Logging;
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,9 +25,6 @@ public class CreateArenaCommand extends MMCommand {
         this.setArgRange(1, 1);
         for (String prefix : plugin.getCommandPrefixes()) {
             this.addKey(prefix + " create arena");
-            this.addKey(prefix + "createarena");
-            this.addKey(prefix + " createarena");
-            this.addKey(prefix + "ca");
         }
         this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " create arena " + ChatColor.GOLD + "Arena1");
         this.setPermission(Perms.CMD_CREATE_ARENA.getPermission());
@@ -31,15 +32,30 @@ public class CreateArenaCommand extends MMCommand {
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
+        System.out.println("cmd!");
         if (!(sender instanceof Player)) {
             messager.bad(Language.CMD_IN_GAME_ONLY, sender);
             return;
         }
         Player player = (Player) sender;
         Selection selection = plugin.getWorldEdit().getSelection(player);
+        Logging.fine("Selection: " + selection);
+        if (!(selection instanceof CuboidSelection)) {
+            messager.normal(Language.CMD_CREATE_ARENA_CUBOID_ONLY, sender);
+            return;
+        }
+        Logging.fine("Selection is cuboid");
+        Region region;
+        try {
+            region = selection.getRegionSelector().getRegion();
+        } catch (IncompleteRegionException e) {
+            messager.normal(Language.CMD_CREATE_ARENA_INCOMPLETE, sender);
+            return;
+        }
+        Logging.fine("Region: " + region);
         Arena arena;
         try {
-            arena = plugin.getArenaManager().newArena(args.get(0), selection);
+            arena = plugin.getArenaManager().newArena(args.get(0), region);
         } catch (IllegalArgumentException e) {
             messager.sendMessage(sender, e.getMessage());
             return;
@@ -47,6 +63,7 @@ public class CreateArenaCommand extends MMCommand {
             messager.bad(Language.CMD_CREATE_ARENA_FILE_ISSUE, sender, e.getMessage());
             return;
         }
+        Logging.fine("Arena: " + arena);
         messager.good(Language.CMD_CREATE_ARENA_SUCCESS, sender, arena.getName());
     }
 }

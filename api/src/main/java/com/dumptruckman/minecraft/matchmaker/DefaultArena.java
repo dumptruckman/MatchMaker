@@ -8,45 +8,49 @@ import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.Vector2D;
-import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.data.ChunkStore;
+import com.sk89q.worldedit.regions.Region;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 class DefaultArena implements Arena {
     
-    private String name;
     private ArenaMap map = null;
     
     private Config<ArenaConfig> config;
     private Config<ArenaRecord> record;
-    
-    private Vector min;
-    private Vector max;
 
-    DefaultArena(String name, Selection selection, Config<ArenaConfig> config, Config<ArenaRecord> record) {
-        this.name = name;
+    DefaultArena(Config<ArenaConfig> config, Config<ArenaRecord> record) {
         this.config = config;
         this.record = record;
-        config.set(ArenaConfig.MIN_POINT, selection.getNativeMinimumPoint());
-        config.set(ArenaConfig.MAX_POINT, selection.getNativeMaximumPoint());
-        
-        reloadFromConfig();
     }
 
-    private void reloadFromConfig() {
-        this.min = config.get(ArenaConfig.MIN_POINT);
-        this.max = config.get(ArenaConfig.MAX_POINT);
+    DefaultArena(String name, Region region, Config<ArenaConfig> config, Config<ArenaRecord> record) {
+        this.config = config;
+        this.record = record;
+        config.set(ArenaConfig.NAME, name);
+        Vector min = region.getMinimumPoint();
+        Vector max = region.getMaximumPoint();
+        config.set(ArenaConfig.MIN_X, min.getBlockX());
+        config.set(ArenaConfig.MIN_Y, min.getBlockY());
+        config.set(ArenaConfig.MIN_Z, min.getBlockZ());
+        config.set(ArenaConfig.MAX_X, max.getBlockX());
+        config.set(ArenaConfig.MAX_Y, max.getBlockY());
+        config.set(ArenaConfig.MAX_Z, max.getBlockZ());
+        config.set(ArenaConfig.WORLD, region.getWorld().getName());
+        config.save();
     }
 
     @Override
     public String getName() {
-        return name;
+        return config().get(ArenaConfig.NAME);
     }
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        config.set(ArenaConfig.NAME, name);
     }
 
     @Override
@@ -70,62 +74,131 @@ class DefaultArena implements Arena {
     }
 
     @Override
-    public void refresh() {
-        reloadFromConfig();
+    public void save() {
+        config.save();
     }
 
     @Override
     public Vector getMinimumPoint() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new Vector(config().get(ArenaConfig.MIN_X), config().get(ArenaConfig.MIN_Y), config().get(ArenaConfig.MIN_Z));
     }
 
     @Override
     public Vector getMaximumPoint() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new Vector(config().get(ArenaConfig.MAX_X), config().get(ArenaConfig.MAX_Y), config().get(ArenaConfig.MAX_Z));
     }
 
     @Override
     public int getArea() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        Vector min = getMinimumPoint();
+        Vector max = getMaximumPoint();
+        return (int)((max.getX() - min.getX() + 1) *
+                (max.getY() - min.getY() + 1) *
+                (max.getZ() - min.getZ() + 1));
     }
 
     @Override
     public int getWidth() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        Vector min = getMinimumPoint();
+        Vector max = getMaximumPoint();
+        return (int) (max.getX() - min.getX() + 1);
     }
 
     @Override
     public int getHeight() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        Vector min = getMinimumPoint();
+        Vector max = getMaximumPoint();
+        return (int) (max.getY() - min.getY() + 1);
     }
 
     @Override
     public int getLength() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        Vector min = getMinimumPoint();
+        Vector max = getMaximumPoint();
+        return (int) (max.getZ() - min.getZ() + 1);
     }
 
     @Override
     public boolean contains(Vector vector) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        double x = vector.getX();
+        double y = vector.getY();
+        double z = vector.getZ();
+
+        Vector min = getMinimumPoint();
+        Vector max = getMaximumPoint();
+
+        return x >= min.getBlockX() && x <= max.getBlockX()
+                && y >= min.getBlockY() && y <= max.getBlockY()
+                && z >= min.getBlockZ() && z <= max.getBlockZ();
     }
 
     @Override
     public Set<Vector2D> getChunks() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        Set<Vector2D> chunks = new HashSet<Vector2D>();
+
+        Vector min = getMinimumPoint();
+        Vector max = getMaximumPoint();
+
+        for (int x = min.getBlockX(); x <= max.getBlockX(); ++x) {
+            for (int y = min.getBlockY(); y <= max.getBlockY(); ++y) {
+                for (int z = min.getBlockZ(); z <= max.getBlockZ(); ++z) {
+                    Vector pt = new Vector(x, y, z);
+                    chunks.add(ChunkStore.toChunk(pt));
+                }
+            }
+        }
+
+        return chunks;
     }
 
     @Override
     public String getWorld() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return config().get(ArenaConfig.WORLD);
     }
 
     @Override
-    public void setWorld(String localWorld) {
-
+    public void setWorld(String world) {
+        config().set(ArenaConfig.WORLD, world);
     }
 
     @Override
     public Iterator<BlockVector> iterator() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        final Vector min = getMinimumPoint();
+        final Vector max = getMaximumPoint();
+
+        return new Iterator<BlockVector>() {
+
+            private int nextX = min.getBlockX();
+            private int nextY = min.getBlockY();
+            private int nextZ = min.getBlockZ();
+
+            public boolean hasNext() {
+                return (nextX != Integer.MIN_VALUE);
+            }
+
+            public BlockVector next() {
+                if (!hasNext()) throw new java.util.NoSuchElementException();
+                BlockVector answer = new BlockVector(nextX, nextY, nextZ);
+                if (++nextX > max.getBlockX()) {
+                    nextX = min.getBlockX();
+                    if (++nextY > max.getBlockY()) {
+                        nextY = min.getBlockY();
+                        if (++nextZ > max.getBlockZ()) {
+                            nextX = Integer.MIN_VALUE;
+                        }
+                    }
+                }
+                return answer;
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    @Override
+    public String toString() {
+        return getName() + ": " + getMinimumPoint() + " - " + getMaximumPoint();
     }
 }
