@@ -24,7 +24,6 @@ public interface MapConfig extends RegionConfig<MapConfig> {
 
         @Override
         public Blocks deserialize(Object o) {
-            System.out.println("Deserializing blocks: " + o.toString());
             return new Blocks(o.toString());
         }
     };
