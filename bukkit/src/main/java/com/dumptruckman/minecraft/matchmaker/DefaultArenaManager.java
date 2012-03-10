@@ -120,13 +120,13 @@ class DefaultArenaManager implements ArenaManager {
         Vector min = arena.getMinimumPoint();
         for (BlockVector vec : arena) {
             Block block = world.getBlockAt(vec.getBlockX(), vec.getBlockY(), vec.getBlockZ());
-            block.setTypeIdAndData(0, (byte) 0, true);
+            block.setTypeIdAndData(0, (byte) 0, false);
         }
         for (LocalBlock localBlock : map.getBlocks()) {
             Block block = world.getBlockAt(min.getBlockX() + localBlock.getX(),
                     min.getBlockY() + localBlock.getY(),
                     min.getBlockZ() + localBlock.getZ());
-            block.setTypeIdAndData(localBlock.getTypeId(), localBlock.getBlockData(), true);
+            block.setTypeIdAndData(localBlock.getTypeId(), localBlock.getBlockData(), false);
         }
         arena.setMap(map);
     }
