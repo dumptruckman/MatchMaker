@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * This represents a single PVP match.  It may be persisted for record keeping.
  */
-public interface Match {
+public interface ArenaMatch {
 
     /**
      *
@@ -21,11 +21,11 @@ public interface Match {
     MatchRecord record();
 
     /**
-     * An interface for Builder classes to be used in implementations of {@link Match}.
+     * An interface for Builder classes to be used in implementations of {@link ArenaMatch}.
      */
     public static interface MatchBuilder {
         
-        Match build();
+        ArenaMatch build();
 
     }
 

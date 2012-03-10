@@ -1,9 +1,12 @@
 package com.dumptruckman.minecraft.matchmaker;
 
 import com.dumptruckman.minecraft.matchmaker.api.ArenaManager;
+import com.dumptruckman.minecraft.matchmaker.api.MapManager;
 import com.dumptruckman.minecraft.matchmaker.api.config.MMConfig;
 import com.dumptruckman.minecraft.matchmaker.api.MatchMaker;
 import com.dumptruckman.minecraft.matchmaker.command.CreateArenaCommand;
+import com.dumptruckman.minecraft.matchmaker.command.CreateMapCommand;
+import com.dumptruckman.minecraft.matchmaker.command.LoadMapCommand;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.YamlPluginConfig;
 import com.dumptruckman.minecraft.pluginbase.plugin.AbstractBukkitPlugin;
@@ -21,13 +24,16 @@ public class MatchMakerPlugin extends AbstractBukkitPlugin<MMConfig> implements 
     
     private WorldEditPlugin worldEdit = null;
     private ArenaManager arenaManager = null;
+    private MapManager mapManager = null;
 
-    private final List<String> commandPrefixes = Arrays.asList("match", "mm", "mmkr");
+    private final List<String> commandPrefixes = Arrays.asList("mm");
     
-    File arenaFolder = null;
+    private File arenaFolder = null;
+    private File mapFolder = null;
     
     public void preEnable() {
         arenaFolder = new File(getDataFolder(), "arenas");
+        mapFolder = new File(getDataFolder(), "maps");
         Language.init();
     }
 
@@ -42,8 +48,15 @@ public class MatchMakerPlugin extends AbstractBukkitPlugin<MMConfig> implements 
         }
     }
 
+    public void preReload() {
+        arenaManager = null;
+        mapManager = null;
+    }
+
     private void registerCommands() {
         getCommandHandler().registerCommand(new CreateArenaCommand(this));
+        getCommandHandler().registerCommand(new CreateMapCommand(this));
+        getCommandHandler().registerCommand(new LoadMapCommand(this));
     }
 
     @Override
@@ -67,8 +80,20 @@ public class MatchMakerPlugin extends AbstractBukkitPlugin<MMConfig> implements 
         }
         return arenaManager;
     }
+
+    @Override
+    public MapManager getMapManager() {
+        if (mapManager == null) {
+            mapManager = new DefaultMapManager(this);
+        }
+        return mapManager;
+    }
     
     public File getArenasFolder() {
         return arenaFolder;
+    }
+
+    public File getMapFolder() {
+        return mapFolder;
     }
 }

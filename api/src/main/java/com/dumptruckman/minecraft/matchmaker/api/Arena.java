@@ -4,16 +4,13 @@ import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.Vector2D;
 
-import java.util.Iterator;
-import java.util.Set;
+import java.io.IOException;
 
 /**
  * Represents a single Arena location in the world.
  */
-public interface Arena extends Iterable<BlockVector> {
+public interface Arena extends MMRegion<ArenaConfig>, Iterable<BlockVector> {
     
     String getName();
     
@@ -22,6 +19,12 @@ public interface Arena extends Iterable<BlockVector> {
     ArenaMap getMap();
     
     void setMap(ArenaMap map);
+
+    boolean isMapValid(ArenaMap map);
+    
+    ArenaMatch getMatch();
+    
+    void setMatch(ArenaMatch match) throws IllegalStateException;
     
     Config<ArenaConfig> config();
     
@@ -29,30 +32,10 @@ public interface Arena extends Iterable<BlockVector> {
 
     /**
      * Saves the Arena data to database.
-     *
-     * @return True if saved successfully.
      */
     void save();
 
-    public Vector getMinimumPoint();
+    String getWorld();
 
-    public Vector getMaximumPoint();
-
-    public int getArea();
-
-    public int getWidth();
-
-    public int getHeight();
-
-    public int getLength();
-
-    public boolean contains(Vector vector);
-
-    public Set<Vector2D> getChunks();
-
-    public String getWorld();
-
-    public void setWorld(String localWorld);
-
-    public Iterator<BlockVector> iterator();
+    void setWorld(String localWorld);
 }

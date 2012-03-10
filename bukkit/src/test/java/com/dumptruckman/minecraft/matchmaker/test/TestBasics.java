@@ -71,7 +71,7 @@ public class TestBasics {
 
         // Initialize a fake command
         Command mockCommand = mock(Command.class);
-        when(mockCommand.getName()).thenReturn("match");
+        when(mockCommand.getName()).thenReturn("mm");
 
         // Assert debug mode is off
         Assert.assertEquals(0, (int) myPlugin.config().get(BaseConfig.DEBUG_MODE));

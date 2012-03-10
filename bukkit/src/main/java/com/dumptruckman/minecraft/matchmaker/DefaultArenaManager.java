@@ -2,14 +2,21 @@ package com.dumptruckman.minecraft.matchmaker;
 
 import com.dumptruckman.minecraft.matchmaker.api.Arena;
 import com.dumptruckman.minecraft.matchmaker.api.ArenaManager;
+import com.dumptruckman.minecraft.matchmaker.api.ArenaMap;
+import com.dumptruckman.minecraft.matchmaker.api.block.LocalBlock;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
 import com.dumptruckman.minecraft.pluginbase.locale.Messager;
 import com.dumptruckman.minecraft.pluginbase.util.Logging;
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.regions.Region;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -45,6 +52,15 @@ class DefaultArenaManager implements ArenaManager {
             }
             if (region.getMaximumPoint().containedWithin(arena.getMinimumPoint(), arena.getMaximumPoint())
                 || region.getMinimumPoint().containedWithin(arena.getMinimumPoint(), arena.getMaximumPoint())) {
+                return arena;
+            }
+        }
+        return null;
+    }
+    
+    public Arena getArenaAt(BlockVector vector) {
+        for (Arena arena : getArenas()) {
+            if (arena.contains(vector)) {
                 return arena;
             }
         }
@@ -91,5 +107,27 @@ class DefaultArenaManager implements ArenaManager {
             Logging.finer("Loaded arena: " + arena);
         }
         Logging.info("Loaded " + arenas.size() + " arenas!");
+    }
+    
+    public void loadMap(Arena arena, ArenaMap map) throws IllegalArgumentException, IllegalStateException {
+        if (!arena.isMapValid(map)) {
+            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.ARENA_LOAD_MAP, map.getName(), arena.getName()));
+        }
+        World world = Bukkit.getWorld(arena.getWorld());
+        if (world == null) {
+            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.ARENA_WORLD_UNLOADED, arena.getWorld(), arena.getName()));
+        }
+        Vector min = arena.getMinimumPoint();
+        for (BlockVector vec : arena) {
+            Block block = world.getBlockAt(vec.getBlockX(), vec.getBlockY(), vec.getBlockZ());
+            block.setTypeIdAndData(0, (byte) 0, true);
+        }
+        for (LocalBlock localBlock : map.getBlocks()) {
+            Block block = world.getBlockAt(min.getBlockX() + localBlock.getX(),
+                    min.getBlockY() + localBlock.getY(),
+                    min.getBlockZ() + localBlock.getZ());
+            block.setTypeIdAndData(localBlock.getTypeId(), localBlock.getBlockData(), true);
+        }
+        arena.setMap(map);
     }
 }
