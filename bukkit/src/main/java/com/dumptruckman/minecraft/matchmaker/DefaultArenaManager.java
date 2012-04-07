@@ -11,8 +11,12 @@ import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
 import com.dumptruckman.minecraft.pluginbase.locale.Messager;
 import com.dumptruckman.minecraft.pluginbase.util.Logging;
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -109,25 +113,17 @@ class DefaultArenaManager implements ArenaManager {
         Logging.info("Loaded " + arenas.size() + " arenas!");
     }
     
-    public void loadMap(Arena arena, ArenaMap map) throws IllegalArgumentException, IllegalStateException {
-        if (!arena.isMapValid(map)) {
+    public void loadMap(Arena arena, ArenaMap map, EditSession session) throws IllegalArgumentException, IllegalStateException, IOException, DataException, MaxChangedBlocksException {
+        CuboidClipboard mapClipboard = map.getClipboard();
+        if (!arena.isMapValid(mapClipboard)) {
             throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.ARENA_LOAD_MAP, map.getName(), arena.getName()));
         }
         World world = Bukkit.getWorld(arena.getWorld());
         if (world == null) {
             throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.ARENA_WORLD_UNLOADED, arena.getWorld(), arena.getName()));
         }
-        Vector min = arena.getMinimumPoint();
-        for (BlockVector vec : arena) {
-            Block block = world.getBlockAt(vec.getBlockX(), vec.getBlockY(), vec.getBlockZ());
-            block.setTypeIdAndData(0, (byte) 0, false);
-        }
-        for (LocalBlock localBlock : map.getBlocks()) {
-            Block block = world.getBlockAt(min.getBlockX() + localBlock.getX(),
-                    min.getBlockY() + localBlock.getY(),
-                    min.getBlockZ() + localBlock.getZ());
-            block.setTypeIdAndData(localBlock.getTypeId(), localBlock.getBlockData(), false);
-        }
+        mapClipboard.place(session, arena.getMinimumPoint(), false);
+        session.flushQueue();
         arena.setMap(map);
     }
 }

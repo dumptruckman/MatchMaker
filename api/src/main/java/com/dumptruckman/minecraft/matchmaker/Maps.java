@@ -5,8 +5,12 @@ import com.dumptruckman.minecraft.matchmaker.api.block.Blocks;
 import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.dumptruckman.minecraft.matchmaker.api.config.MapConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.MapRecord;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.regions.Region;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -56,11 +60,11 @@ public class Maps implements Iterable<ArenaMap> {
         }
     }
 
-    static ArenaMap newMap(String name, Region region, Blocks blocks, Config<MapConfig> config, Config<MapRecord> record) throws IllegalArgumentException {
-        return new DefaultMap(name, region, blocks, config, record);
+    static ArenaMap newMap(File schematicFile, Config<MapRecord> record, CuboidClipboard clipboard) throws IllegalArgumentException, DataException, IOException {
+        return new DefaultMap(schematicFile, record, clipboard);
     }
 
-    static ArenaMap newMap(Config<MapConfig> config, Config<MapRecord> record) {
-        return new DefaultMap(config, record);
+    static ArenaMap newMap(File schematicFile, Config<MapRecord> record) {
+        return new DefaultMap(schematicFile, record);
     }
 }

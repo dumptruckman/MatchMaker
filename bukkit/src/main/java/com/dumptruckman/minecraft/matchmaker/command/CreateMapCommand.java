@@ -5,9 +5,12 @@ import com.dumptruckman.minecraft.matchmaker.api.Arena;
 import com.dumptruckman.minecraft.matchmaker.api.ArenaMap;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.Perms;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.EmptyClipboardException;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -38,25 +41,26 @@ public class CreateMapCommand extends MMCommand {
             return;
         }
         Player player = (Player) sender;
-        Selection selection = plugin.getWorldEdit().getSelection(player);
-        if (!(selection instanceof CuboidSelection)) {
-            messager.normal(Language.CUBOID_SELECTION_ONLY, sender);
-            return;
-        }
-        Region region;
+        //Selection selection = plugin.getWorldEdit().getSelection(player);
+        CuboidClipboard clipboard;
         try {
-            region = selection.getRegionSelector().getRegion();
-        } catch (IncompleteRegionException e) {
-            messager.normal(Language.MUST_COMPLETE_SELECTION, sender);
+            clipboard = plugin.getWorldEdit().getWorldEdit().getSession(sender.getName()).getClipboard();
+        } catch (EmptyClipboardException e) {
+            messager.normal(Language.CLIPBOARD_EMTPY, sender);
             return;
         }
+        Arena arena = plugin.getArenaManager().getArenaAt(clipboard.getOrigin().toBlockVector());
+        clipboard.setOrigin(arena.getMinimumPoint());
         ArenaMap map;
         try {
-            map = plugin.getMapManager().newMap(args.get(0), region);
+            map = plugin.getMapManager().newMap(args.get(0), clipboard);
         } catch (IllegalArgumentException e) {
             messager.sendMessage(sender, e.getMessage());
             return;
         } catch (IOException e) {
+            messager.bad(Language.CMD_CREATE_MAP_FILE_ISSUE, sender, e.getMessage());
+            return;
+        } catch (DataException e) {
             messager.bad(Language.CMD_CREATE_MAP_FILE_ISSUE, sender, e.getMessage());
             return;
         }

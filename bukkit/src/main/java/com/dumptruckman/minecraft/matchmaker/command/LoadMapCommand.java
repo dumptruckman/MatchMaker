@@ -7,8 +7,11 @@ import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.Perms;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.LocalPlayer;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -65,13 +68,30 @@ public class LoadMapCommand extends MMCommand {
             return;
         }
 
+        LocalPlayer player = plugin.getWorldEdit().wrapCommandSender(sender);
+
         try {
-            plugin.getArenaManager().loadMap(arena, map);
+            plugin.getArenaManager().loadMap(arena, map,
+                    plugin.getWorldEdit().getWorldEdit().getSession(player).createEditSession(player));
         } catch (IllegalArgumentException e) {
             messager.sendMessage(sender, e.getMessage());
+            e.printStackTrace();
             return;
         } catch (IllegalStateException e) {
             messager.sendMessage(sender, e.getMessage());
+            e.printStackTrace();
+            return;
+        } catch (DataException e) {
+            messager.sendMessage(sender, e.getMessage());
+            e.printStackTrace();
+            return;
+        } catch (IOException e) {
+            messager.sendMessage(sender, e.getMessage());
+            e.printStackTrace();
+            return;
+        } catch (MaxChangedBlocksException e) {
+            messager.sendMessage(sender, e.getMessage());
+            e.printStackTrace();
             return;
         }
 

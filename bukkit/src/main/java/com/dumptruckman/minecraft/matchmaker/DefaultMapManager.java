@@ -12,13 +12,16 @@ import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
 import com.dumptruckman.minecraft.pluginbase.locale.Messager;
 import com.dumptruckman.minecraft.pluginbase.util.Logging;
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import java.awt.datatransfer.Clipboard;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -53,35 +56,18 @@ class DefaultMapManager implements MapManager {
         return maps;
     }
 
-    public ArenaMap newMap(String name, Region region) throws IllegalArgumentException, IOException {
+    public ArenaMap newMap(String name, CuboidClipboard clipboard) throws IllegalArgumentException, IOException, DataException {
         Messager messager = matchMaker.getMessager();
         if (getMap(name) != null) {
             throw new IllegalArgumentException(messager.getMessage(Language.CMD_CREATE_MAP_EXISTING_NAME, name));
         }
         
         File mapRecords = new File(matchMaker.getMapFolder(), "records");
-        ArenaMap map = Maps.newMap(name, region, getBlocks(region),
-                new YamlConfig<MapConfig>(matchMaker, false, new File(
-                        matchMaker.getMapFolder(), name + ".yml"), MapConfig.class),
+        ArenaMap map = Maps.newMap(new File(matchMaker.getMapFolder(), name + ".schematic"),
                 new YamlConfig<MapRecord>(matchMaker, false, new File(
-                        mapRecords, name + ".yml"), MapRecord.class));
+                        mapRecords, name + ".yml"), MapRecord.class), clipboard);
         maps.add(map);
         return map;
-    }
-    
-    private Blocks getBlocks(Region region) {
-        Set<LocalBlock> blocks = new HashSet<LocalBlock>();
-        World world = Bukkit.getWorld(region.getWorld().getName());
-        Vector min = region.getMinimumPoint();
-        for (BlockVector vec : region) {
-            Block block = world.getBlockAt(vec.getBlockX(), vec.getBlockY(), vec.getBlockZ());
-            if (block.getType() != Material.AIR) {
-                blocks.add(BukkitBlocks.valueOf(block, block.getX() - min.getBlockX(),
-                        block.getY() - min.getBlockY(),
-                        block.getZ() - min.getBlockZ()));
-            }
-        }
-        return new Blocks(blocks);
     }
 
     private ArenaMap loadMap(String name) {
@@ -89,13 +75,13 @@ class DefaultMapManager implements MapManager {
         if (!mapFolder.exists()) {
             return null;
         }
-        File mapFile = new File(mapFolder, name + ".yml");
+        File mapFile = new File(mapFolder, name + ".schematic");
         if (!mapFile.exists())  {
             return null;
         }
-        File recordFile = new File(new File(mapFolder, "records"), mapFile.getName());
+        File recordFile = new File(new File(mapFolder, "records"), name + ".yml");
         try {
-            ArenaMap map = Maps.newMap(new YamlConfig<MapConfig>(matchMaker, false, mapFile, MapConfig.class),
+            ArenaMap map = Maps.newMap(mapFile,
                     new YamlConfig<MapRecord>(matchMaker, false, recordFile, MapRecord.class));
             maps.add(map);
             return map;

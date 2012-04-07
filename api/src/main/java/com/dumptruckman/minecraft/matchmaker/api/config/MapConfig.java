@@ -16,7 +16,7 @@ public interface MapConfig extends RegionConfig<MapConfig> {
 
     ConfigEntry<String> NAME = new SimpleConfigEntry<String>(String.class, "name", "");
 
-    ConfigEntry<Blocks> BLOCKS = new AdvancedConfigEntry<Blocks>(Blocks.class, "blocks", new Blocks(new HashSet<LocalBlock>())) {
+    /*ConfigEntry<Blocks> BLOCKS = new AdvancedConfigEntry<Blocks>(Blocks.class, "blocks", new Blocks(new HashSet<LocalBlock>())) {
         @Override
         public Object serialize(Blocks blocks) {
             return blocks.toString();
@@ -26,5 +26,5 @@ public interface MapConfig extends RegionConfig<MapConfig> {
         public Blocks deserialize(Object o) {
             return new Blocks(o.toString());
         }
-    };
+    };*/
 }

@@ -4,6 +4,7 @@ import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.CuboidClipboard;
 
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ public interface Arena extends MMRegion<ArenaConfig>, Iterable<BlockVector> {
     
     void setMap(ArenaMap map);
 
-    boolean isMapValid(ArenaMap map);
+    boolean isMapValid(CuboidClipboard clipboard);
     
     ArenaMatch getMatch();
     

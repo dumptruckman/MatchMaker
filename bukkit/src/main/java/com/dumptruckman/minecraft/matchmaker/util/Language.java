@@ -37,6 +37,8 @@ public class Language {
 
     public static final Message MUST_COMPLETE_SELECTION = new Message("worldedit.selection.must_complete",
             "You must complete your selection first!");
+    public static final Message CLIPBOARD_EMTPY = new Message("worldedit.selection.clipboard_empty",
+            "You must copy a selection to your clipboard!");
     public static final Message CUBOID_SELECTION_ONLY = new Message("worldedit.selection.cuboid_only",
             "Selection must be cuboid!");
 

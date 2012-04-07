@@ -7,46 +7,57 @@ import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.dumptruckman.minecraft.matchmaker.api.config.MapConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.MapRecord;
+import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.WorldEditAPI;
+import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.regions.Region;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Iterator;
 
-class DefaultMap extends DefaultRegion<MapConfig> implements ArenaMap {
+class DefaultMap /*extends DefaultRegion<MapConfig>*/ implements ArenaMap {
     
     private Config<MapRecord> record;
-    private Blocks blocks;
+    private WeakReference<CuboidClipboard> clipboardWeakReference;
+    private File schematicFile;
+    private String name;
 
-    DefaultMap(Config<MapConfig> config, Config<MapRecord> record) {
-        super(config);
+    DefaultMap(File schematicFile, Config<MapRecord> record) {
         this.record = record;
-        this.blocks = config.get(MapConfig.BLOCKS);
+        this.schematicFile = schematicFile;
+        this.name = schematicFile.getName().substring(0, schematicFile.getName().indexOf('.'));
+        //this.clipboardWeakReference = new WeakReference<CuboidClipboard>(clipboardWeakReference);
+        //this.blocks = config.get(MapConfig.BLOCKS);
     }
 
-    DefaultMap(String name, Region region, Blocks blocks, Config<MapConfig> config, Config<MapRecord> record) {
-        super(region, config);
-        this.record = record;
-        this.blocks = blocks;
-        config.set(MapConfig.NAME, name);
-        config.set(MapConfig.BLOCKS, blocks);
-        Vector min = region.getMinimumPoint();
-        Vector max = region.getMaximumPoint();
-        config.set(ArenaConfig.MAX_X, max.getBlockX() - min.getBlockX());
-        config.set(ArenaConfig.MAX_Y, max.getBlockY() - min.getBlockY());
-        config.set(ArenaConfig.MAX_Z, max.getBlockZ() - min.getBlockZ());
-        config.set(ArenaConfig.MIN_X, 0);
-        config.set(ArenaConfig.MIN_Y, 0);
-        config.set(ArenaConfig.MIN_Z, 0);
-        config.save();
+    DefaultMap(File schematicFile, Config<MapRecord> record, CuboidClipboard clipboard) throws DataException, IOException {
+        this(schematicFile, record);
+        this.clipboardWeakReference = new WeakReference<CuboidClipboard>(clipboard);
+        save();
     }
     
     public String getName() {
-        return config().get(MapConfig.NAME);
+        return this.name;
     }
 
     @Override
-    public Blocks getBlocks() {
-        return blocks;
+    public CuboidClipboard getClipboard() throws DataException, IOException {
+        WeakReference<CuboidClipboard> clipRef = this.clipboardWeakReference;
+        if (clipRef != null) {
+            CuboidClipboard clipboard = this.clipboardWeakReference.get();
+            if (clipboard == null) {
+                clipboard = CuboidClipboard.loadSchematic(this.schematicFile);
+                clipRef = new WeakReference<CuboidClipboard>(clipboard);
+            }
+        } else {
+            clipRef = new WeakReference<CuboidClipboard>(CuboidClipboard.loadSchematic(this.schematicFile));
+        }
+
+        return clipRef.get();
     }
 
     @Override
@@ -55,13 +66,8 @@ class DefaultMap extends DefaultRegion<MapConfig> implements ArenaMap {
     }
 
     @Override
-    public void save() {
-        config().save();
+    public void save() throws DataException, IOException {
+        getClipboard().saveSchematic(schematicFile);
         record().save();
-    }
-
-    @Override
-    public Iterator<LocalBlock> iterator() {
-        return blocks.iterator();
     }
 }

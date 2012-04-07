@@ -7,6 +7,7 @@ import com.dumptruckman.minecraft.matchmaker.api.config.ArenaConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.ArenaRecord;
 import com.dumptruckman.minecraft.matchmaker.api.config.Config;
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.regions.Region;
 
@@ -51,10 +52,10 @@ class DefaultArena extends DefaultRegion<ArenaConfig> implements Arena {
         this.map = map;
     }
 
-    public boolean isMapValid(ArenaMap map) {
-        return getLength() == map.getLength()
-                && getWidth() == map.getWidth()
-                && getHeight() == map.getHeight();
+    public boolean isMapValid(CuboidClipboard clipboard) {
+        return getLength() == clipboard.getLength()
+                && getWidth() == clipboard.getWidth()
+                && getHeight() == clipboard.getHeight();
     }
 
     @Override
