@@ -19,7 +19,7 @@
     <repositories>
 
         <repository>
-            <id>bukkit</id>
+            <id>bukkit-legacy</id>
             <url>http://repo.bukkit.org/content/repositories/legacy/</url>
         </repository>
         <repository>
