@@ -1,13 +1,10 @@
 package com.dumptruckman.minecraft.matchmaker;
 
 import com.dumptruckman.minecraft.matchmaker.api.ArenaMap;
-import com.dumptruckman.minecraft.matchmaker.api.block.Blocks;
 import com.dumptruckman.minecraft.matchmaker.api.config.Config;
-import com.dumptruckman.minecraft.matchmaker.api.config.MapConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.MapRecord;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.data.DataException;
-import com.sk89q.worldedit.regions.Region;
 
 import java.io.File;
 import java.io.IOException;

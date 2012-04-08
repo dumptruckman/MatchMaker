@@ -10,7 +10,6 @@ package com.dumptruckman.minecraft.matchmaker.test;
 import com.dumptruckman.minecraft.matchmaker.api.config.MatchConfig;
 import com.dumptruckman.minecraft.pluginbase.config.BaseConfig;
 import com.dumptruckman.minecraft.matchmaker.MatchMakerPlugin;
-import com.dumptruckman.minecraft.matchmaker.api.MatchMaker;
 import com.dumptruckman.minecraft.matchmaker.test.utils.TestInstanceCreator;
 import com.dumptruckman.minecraft.pluginbase.plugin.AbstractBukkitPlugin;
 import junit.framework.Assert;

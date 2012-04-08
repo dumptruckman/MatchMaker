@@ -2,31 +2,16 @@ package com.dumptruckman.minecraft.matchmaker;
 
 import com.dumptruckman.minecraft.matchmaker.api.ArenaMap;
 import com.dumptruckman.minecraft.matchmaker.api.MapManager;
-import com.dumptruckman.minecraft.matchmaker.api.block.Blocks;
-import com.dumptruckman.minecraft.matchmaker.api.block.BukkitBlocks;
-import com.dumptruckman.minecraft.matchmaker.api.block.LocalBlock;
-import com.dumptruckman.minecraft.matchmaker.api.config.MapConfig;
 import com.dumptruckman.minecraft.matchmaker.api.config.MapRecord;
 import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.YamlConfig;
 import com.dumptruckman.minecraft.pluginbase.locale.Messager;
 import com.dumptruckman.minecraft.pluginbase.util.Logging;
-import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.CuboidClipboard;
-import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.data.DataException;
-import com.sk89q.worldedit.regions.Region;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 
-import java.awt.datatransfer.Clipboard;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 class DefaultMapManager implements MapManager {
 
