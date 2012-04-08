@@ -94,6 +94,9 @@ public class MatchMakerPlugin extends AbstractBukkitPlugin<MMConfig> implements 
     }
 
     public File getMapFolder() {
+        if (!mapFolder.exists()) {
+            mapFolder.mkdirs();
+        }
         return mapFolder;
     }
 }

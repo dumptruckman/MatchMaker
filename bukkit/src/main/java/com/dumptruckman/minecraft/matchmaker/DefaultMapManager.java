@@ -12,6 +12,7 @@ import com.sk89q.worldedit.data.DataException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 class DefaultMapManager implements MapManager {
 
@@ -55,19 +56,26 @@ class DefaultMapManager implements MapManager {
         return map;
     }
 
+    private File getMapFile(String name) {
+        return new File(matchMaker.getMapFolder(), name + ".schematic");
+    }
+
+    private File getRecordFile(String name) {
+        File recordFolder = new File(matchMaker.getMapFolder(), "records");
+        recordFolder.mkdirs();
+        return new File(recordFolder, name + ".yml");
+    }
+
     private ArenaMap loadMap(String name) {
         File mapFolder = matchMaker.getMapFolder();
-        if (!mapFolder.exists()) {
-            return null;
-        }
-        File mapFile = new File(mapFolder, name + ".schematic");
+        mapFolder.mkdirs();
+        File mapFile = getMapFile(name);
         if (!mapFile.exists())  {
             return null;
         }
-        File recordFile = new File(new File(mapFolder, "records"), name + ".yml");
         try {
             ArenaMap map = Maps.newMap(mapFile,
-                    new YamlConfig<MapRecord>(matchMaker, false, recordFile, MapRecord.class));
+                    new YamlConfig<MapRecord>(matchMaker, false, getRecordFile(name), MapRecord.class));
             maps.add(map);
             return map;
         } catch (IOException e) {
@@ -75,5 +83,24 @@ class DefaultMapManager implements MapManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean deleteMap(String name) throws IllegalArgumentException {
+        File mapFile = getMapFile(name);
+        if (!mapFile.exists()) {
+            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.CMD_DELETE_MAP_NAME));
+        }
+        removeFromMaps(name);
+        return mapFile.delete();
+    }
+
+    private void removeFromMaps(String name) {
+        Iterator<ArenaMap> it = maps.iterator();
+        while (it.hasNext()) {
+            if (it.next().getName().equals(name)) {
+                it.remove();
+            }
+        }
     }
 }

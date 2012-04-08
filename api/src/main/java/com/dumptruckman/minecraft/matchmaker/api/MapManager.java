@@ -18,4 +18,6 @@ public interface MapManager {
     Maps getMaps();
 
     ArenaMap newMap(String name, CuboidClipboard clipboard) throws IllegalArgumentException, IOException, DataException;
+
+    boolean deleteMap(String name) throws IllegalArgumentException;
 }

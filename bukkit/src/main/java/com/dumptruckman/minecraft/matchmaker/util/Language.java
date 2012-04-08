@@ -22,15 +22,24 @@ public class Language {
 
 
     public static final Message CMD_CREATE_MAP_NAME = new Message("cmd.create_map.name",
-            "Create a map.");
+            "Creates a map.");
     public static final Message CMD_CREATE_MAP_USAGE = new Message("cmd.create_map.usage",
             "/%1 save map &6<name>");
     public static final Message CMD_CREATE_MAP_SUCCESS = new Message("cmd.create_map.success",
             "You successfully created new map named: %1");
     public static final Message CMD_CREATE_MAP_EXISTING_NAME = new Message("cmd.create_map.existing_name",
             "There is already an map named: %1");
-    public static final Message CMD_CREATE_MAP_FILE_ISSUE = new Message("cmd.create_map.file_issue",
+    public static final Message ERROR_PROCESSING_MAP_FILES = new Message("error.processing_map_files",
             "Something went wrong processing the map files: %1");
+
+    public static final Message CMD_DELETE_MAP_NAME = new Message("cmd.delete_map.name",
+            "Deletes a map.");
+    public static final Message CMD_DELETE_MAP_USAGE = new Message("cmd.delete_map.usage",
+            "/%1 delete map &6<name>");
+    public static final Message CMD_DELETE_MAP_SUCCESS = new Message("cmd.delete_map.success",
+            "You successfully deleted map named: %1");
+    public static final Message CMD_DELETE_MAP_NO_MAP = new Message("cmd.delete_map.no_map",
+            "There is no map named: %1");
 
     public static final Message MUST_TARGET_BLOCK = new Message("general.must_target_block",
             "You must be targeting a block!");

@@ -7,11 +7,7 @@ import com.dumptruckman.minecraft.matchmaker.util.Language;
 import com.dumptruckman.minecraft.matchmaker.util.Perms;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EmptyClipboardException;
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
-import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.sk89q.worldedit.data.DataException;
-import com.sk89q.worldedit.regions.Region;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -58,10 +54,10 @@ public class CreateMapCommand extends MMCommand {
             messager.sendMessage(sender, e.getMessage());
             return;
         } catch (IOException e) {
-            messager.bad(Language.CMD_CREATE_MAP_FILE_ISSUE, sender, e.getMessage());
+            messager.bad(Language.ERROR_PROCESSING_MAP_FILES, sender, e.getMessage());
             return;
         } catch (DataException e) {
-            messager.bad(Language.CMD_CREATE_MAP_FILE_ISSUE, sender, e.getMessage());
+            messager.bad(Language.ERROR_PROCESSING_MAP_FILES, sender, e.getMessage());
             return;
         }
         messager.good(Language.CMD_CREATE_MAP_SUCCESS, sender, map.getName());

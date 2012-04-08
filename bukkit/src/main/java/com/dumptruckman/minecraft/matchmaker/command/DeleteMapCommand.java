@@ -19,47 +19,23 @@ public class DeleteMapCommand extends MMCommand {
 
     public DeleteMapCommand(MatchMakerPlugin plugin) {
         super(plugin);
-        this.setName(messager.getMessage(Language.CMD_CREATE_MAP_NAME));
-        this.setCommandUsage(messager.getMessage(Language.CMD_CREATE_MAP_USAGE, plugin.getCommandPrefixes().get(0)));
+        this.setName(messager.getMessage(Language.CMD_DELETE_MAP_NAME));
+        this.setCommandUsage(messager.getMessage(Language.CMD_DELETE_MAP_USAGE, plugin.getCommandPrefixes().get(0)));
         this.setArgRange(1, 1);
-        for (String prefix : plugin.getCommandPrefixes()) {
-            this.addKey(prefix + " create map");
-            this.addKey(prefix + " save map");
-        }
-        this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " save map " + ChatColor.GOLD + "Map1");
-        this.setPermission(Perms.CMD_CREATE_MAP.getPermission());
+        this.addPrefixedKey(" delete map");
+        this.addPrefixedKey(" remove map");
+        this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " delete map " + ChatColor.GOLD + "Map1");
+        this.setPermission(Perms.CMD_DELETE_MAP.getPermission());
     }
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if (!(sender instanceof Player)) {
-            messager.bad(Language.CMD_IN_GAME_ONLY, sender);
-            return;
-        }
-        Player player = (Player) sender;
-        //Selection selection = plugin.getWorldEdit().getSelection(player);
-        CuboidClipboard clipboard;
         try {
-            clipboard = plugin.getWorldEdit().getWorldEdit().getSession(sender.getName()).getClipboard();
-        } catch (EmptyClipboardException e) {
-            messager.normal(Language.CLIPBOARD_EMTPY, sender);
-            return;
-        }
-        Arena arena = plugin.getArenaManager().getArenaAt(clipboard.getOrigin().toBlockVector());
-        clipboard.setOrigin(arena.getMinimumPoint());
-        ArenaMap map;
-        try {
-            map = plugin.getMapManager().newMap(args.get(0), clipboard);
+            plugin.getMapManager().deleteMap(args.get(0));
         } catch (IllegalArgumentException e) {
             messager.sendMessage(sender, e.getMessage());
             return;
-        } catch (IOException e) {
-            messager.bad(Language.CMD_CREATE_MAP_FILE_ISSUE, sender, e.getMessage());
-            return;
-        } catch (DataException e) {
-            messager.bad(Language.CMD_CREATE_MAP_FILE_ISSUE, sender, e.getMessage());
-            return;
         }
-        messager.good(Language.CMD_CREATE_MAP_SUCCESS, sender, map.getName());
+        messager.good(Language.CMD_DELETE_MAP_SUCCESS, sender, args.get(0));
     }
 }
