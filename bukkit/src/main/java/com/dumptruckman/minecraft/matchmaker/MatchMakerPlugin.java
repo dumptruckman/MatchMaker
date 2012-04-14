@@ -90,6 +90,9 @@ public class MatchMakerPlugin extends AbstractBukkitPlugin<MMConfig> implements 
     }
     
     public File getArenasFolder() {
+        if (!arenaFolder.exists()) {
+            arenaFolder.mkdirs();
+        }
         return arenaFolder;
     }
 

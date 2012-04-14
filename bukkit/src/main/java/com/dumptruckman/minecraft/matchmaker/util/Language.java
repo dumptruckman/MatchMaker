@@ -41,6 +41,15 @@ public class Language {
     public static final Message CMD_DELETE_MAP_NO_MAP = new Message("cmd.delete_map.no_map",
             "There is no map named: %1");
 
+    public static final Message CMD_DELETE_ARENA_NAME = new Message("cmd.delete_arena.name",
+            "Deletes an arena.");
+    public static final Message CMD_DELETE_ARENA_USAGE = new Message("cmd.delete_arena.usage",
+            "/%1 delete arena &6<name>");
+    public static final Message CMD_DELETE_ARENA_SUCCESS = new Message("cmd.delete_arena.success",
+            "You successfully deleted arena named: %1");
+    public static final Message CMD_DELETE_ARENA_NO_ARENA = new Message("cmd.delete_arena.no_arena",
+            "There is no arena named: %1");
+
     public static final Message MUST_TARGET_BLOCK = new Message("general.must_target_block",
             "You must be targeting a block!");
 

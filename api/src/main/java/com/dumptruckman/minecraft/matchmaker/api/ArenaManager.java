@@ -24,4 +24,6 @@ public interface ArenaManager {
     void loadArenas() throws IOException;
 
     void loadMap(Arena arena, ArenaMap map, EditSession session) throws IllegalArgumentException, IllegalStateException, DataException, IOException, MaxChangedBlocksException;
+
+    boolean deleteArena(String name);
 }

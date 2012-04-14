@@ -6,6 +6,8 @@ public class Perms {
 
     public static final Perm CMD_CREATE_ARENA = new Perm.Builder("arena.create").desc("Gives user access to 'create arena' command.").usePluginName().commandPermission().build();
 
+    public static final Perm CMD_DELETE_ARENA = new Perm.Builder("arena.delete").desc("Gives user access to 'delete arena' command.").usePluginName().commandPermission().build();
+
     public static final Perm CMD_CREATE_MAP = new Perm.Builder("map.create").desc("Gives user access to 'create map' command.").usePluginName().commandPermission().build();
 
     public static final Perm CMD_DELETE_MAP = new Perm.Builder("map.delete").desc("Gives user access to 'delete map' command.").usePluginName().commandPermission().build();

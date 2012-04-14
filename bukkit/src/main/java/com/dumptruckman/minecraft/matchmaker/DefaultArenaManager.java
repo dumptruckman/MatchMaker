@@ -21,6 +21,7 @@ import org.bukkit.World;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Iterator;
 
 class DefaultArenaManager implements ArenaManager {
 
@@ -121,5 +122,28 @@ class DefaultArenaManager implements ArenaManager {
         mapClipboard.place(session, arena.getMinimumPoint(), false);
         session.flushQueue();
         arena.setMap(map);
+    }
+
+    private File getArenaFile(String name) {
+        return new File(matchMaker.getArenasFolder(), name + ".yml");
+    }
+
+    @Override
+    public boolean deleteArena(String name) throws IllegalArgumentException {
+        File arenaFile = getArenaFile(name);
+        if (!arenaFile.exists()) {
+            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.CMD_DELETE_ARENA_NO_ARENA, name));
+        }
+        removeFromArenas(name);
+        return arenaFile.delete();
+    }
+
+    private void removeFromArenas(String name) {
+        Iterator<Arena> it = arenas.iterator();
+        while (it.hasNext()) {
+            if (it.next().getName().equals(name)) {
+                it.remove();
+            }
+        }
     }
 }

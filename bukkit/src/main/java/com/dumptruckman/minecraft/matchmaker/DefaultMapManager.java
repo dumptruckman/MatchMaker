@@ -89,7 +89,7 @@ class DefaultMapManager implements MapManager {
     public boolean deleteMap(String name) throws IllegalArgumentException {
         File mapFile = getMapFile(name);
         if (!mapFile.exists()) {
-            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.CMD_DELETE_MAP_NAME));
+            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.CMD_DELETE_MAP_NO_MAP, name));
         }
         removeFromMaps(name);
         return mapFile.delete();
