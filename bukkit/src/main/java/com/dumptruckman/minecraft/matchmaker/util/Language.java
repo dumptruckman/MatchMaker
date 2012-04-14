@@ -7,6 +7,9 @@ public class Language {
     public static final Message CMD_IN_GAME_ONLY = new Message("cmd.in_game_only",
             "This command may only be used in game!");
 
+    public static final Message SELECT_ARENA_FIRST = new Message("cmd.select_arena_first",
+            "You must first select an arena! (Or use the arena name arg in command)");
+
     public static final Message CMD_CREATE_ARENA_NAME = new Message("cmd.create_arena.name",
             "Create an arena.");
     public static final Message CMD_CREATE_ARENA_USAGE = new Message("cmd.create_arena.usage",
@@ -20,6 +23,12 @@ public class Language {
     public static final Message CMD_CREATE_ARENA_FILE_ISSUE = new Message("cmd.create_arena.file_issue",
             "Something went wrong processing the arena files: %1");
 
+    public static final Message CMD_CLEAR_ARENA_NAME = new Message("cmd.clear_arena.name",
+            "Clear the blocks out of an arena.");
+    public static final Message CMD_CLEAR_ARENA_USAGE = new Message("cmd.clear_arena.usage",
+            "/%1 clear arena &6[name]");
+    public static final Message CMD_CLEAR_ARENA_SUCCESS = new Message("cmd.clear_arena.success",
+            "You successfully created new arena named: %1");
 
     public static final Message CMD_CREATE_MAP_NAME = new Message("cmd.create_map.name",
             "Creates a map.");
@@ -72,6 +81,8 @@ public class Language {
             "You must copy a selection to your clipboard!");
     public static final Message CUBOID_SELECTION_ONLY = new Message("worldedit.selection.cuboid_only",
             "Selection must be cuboid!");
+    public static final Message MAX_CHANGED_BLOCKS = new Message("worldedit.max_change_blocks",
+            "You are not allowed to change this many blocks!");
 
     public static final Message CMD_LOAD_MAP_NAME = new Message("cmd.load_map.name",
             "Load a map into targeted arena.");

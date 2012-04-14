@@ -23,21 +23,18 @@ public class SelectArenaCommand extends MMCommand {
         this.setCommandUsage(messager.getMessage(Language.CMD_SELECT_ARENA_USAGE, plugin.getCommandPrefixes().get(0)));
         this.setArgRange(0, 2);
         this.addPrefixedKey(" select arena");
+        this.addPrefixedKey(" select");
         this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " select arena " + ChatColor.GOLD + "Arena1");
-        this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " select arena " + ChatColor.GOLD + "Arena2 --we");
+        this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " select " + ChatColor.GOLD + "Arena2 --we");
         this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " select arena " + ChatColor.GOLD + "--we");
-        this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " select arena ");
+        this.addCommandExample("/" + plugin.getCommandPrefixes().get(0) + " select");
         this.setPermission(Perms.CMD_SELECT_ARENA.getPermission());
     }
 
     @Override
     public void runCommand(CommandSender sender, List<String> args) {
-        if (!(sender instanceof Player)) {
-            messager.bad(Language.CMD_IN_GAME_ONLY, sender);
-            return;
-        }
-        Player player = (Player) sender;
         String name = null;
+        Arena arena;
         boolean worldEdit = false;
         for (String arg : args) {
             if (arg.equalsIgnoreCase("--we")) {
@@ -46,7 +43,6 @@ public class SelectArenaCommand extends MMCommand {
                 name = arg;
             }
         }
-        Arena arena;
         if (name != null) {
             arena = plugin.getArenaManager().getArena(name);
             if (arena == null) {
@@ -54,6 +50,11 @@ public class SelectArenaCommand extends MMCommand {
                 return;
             }
         } else {
+            if (!(sender instanceof Player)) {
+                messager.bad(Language.CMD_IN_GAME_ONLY, sender);
+                return;
+            }
+            Player player = (Player) sender;
             Block block = player.getTargetBlock(null, 100);
             if (block == null) {
                 messager.bad(Language.MUST_TARGET_BLOCK, sender);
@@ -65,8 +66,10 @@ public class SelectArenaCommand extends MMCommand {
                 return;
             }
         }
-        plugin.getArenaManager().setSelectedArena(player.getName(), arena);
-        if (worldEdit) {
+
+        plugin.getArenaManager().setSelectedArena(sender.getName(), arena);
+        if (worldEdit && sender instanceof Player) {
+            Player player = (Player) sender;
             World world = Bukkit.getWorld(arena.getWorld());
             if (world == null) {
                 messager.bad(Language.CMD_SELECT_ARENA_WORLD_UNLOADED, sender, arena.getWorld());
