@@ -21,12 +21,16 @@ import org.bukkit.World;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 class DefaultArenaManager implements ArenaManager {
 
     private Arenas arenas = new Arenas();
     private MatchMakerPlugin matchMaker;
+
+    private Map<String, String> selectedArenas = new HashMap<String, String>();
     
     public DefaultArenaManager(MatchMakerPlugin matchMaker) {
         this.matchMaker = matchMaker;
@@ -59,9 +63,9 @@ class DefaultArenaManager implements ArenaManager {
         return null;
     }
     
-    public Arena getArenaAt(BlockVector vector) {
+    public Arena getArenaAt(String world, BlockVector vector) {
         for (Arena arena : getArenas()) {
-            if (arena.contains(vector)) {
+            if (arena.contains(vector) && arena.getWorld().equals(world)) {
                 return arena;
             }
         }
@@ -132,7 +136,7 @@ class DefaultArenaManager implements ArenaManager {
     public boolean deleteArena(String name) throws IllegalArgumentException {
         File arenaFile = getArenaFile(name);
         if (!arenaFile.exists()) {
-            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.CMD_DELETE_ARENA_NO_ARENA, name));
+            throw new IllegalArgumentException(matchMaker.getMessager().getMessage(Language.NO_ARENA_NAMED, name));
         }
         removeFromArenas(name);
         return arenaFile.delete();
@@ -145,5 +149,13 @@ class DefaultArenaManager implements ArenaManager {
                 it.remove();
             }
         }
+    }
+
+    public void setSelectedArena(String player, Arena arena) {
+        selectedArenas.put(player, arena.getName());
+    }
+
+    public Arena getSelectedArena(String player) {
+        return getArena(selectedArenas.get(player));
     }
 }

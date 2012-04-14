@@ -47,8 +47,21 @@ public class Language {
             "/%1 delete arena &6<name>");
     public static final Message CMD_DELETE_ARENA_SUCCESS = new Message("cmd.delete_arena.success",
             "You successfully deleted arena named: %1");
-    public static final Message CMD_DELETE_ARENA_NO_ARENA = new Message("cmd.delete_arena.no_arena",
+    public static final Message NO_ARENA_NAMED = new Message("cmd.delete_arena.no_arena",
             "There is no arena named: %1");
+
+    public static final Message CMD_SELECT_ARENA_NAME = new Message("cmd.select_arena.name",
+            "Selects an arena optionally selects with WorldEdit.");
+    public static final Message CMD_SELECT_ARENA_USAGE = new Message("cmd.select_arena.usage",
+            "/%1 select arena &6[name] [--we]");
+    public static final Message CMD_SELECT_ARENA_SUCCESS = new Message("cmd.select_arena.success",
+            "You've selected '%1'.");
+    public static final Message CMD_SELECT_ARENA_SUCCESS_WE = new Message("cmd.select_arena.success_we",
+            "You've selected '%1' with WorldEdit.");
+    public static final Message NO_ARENA_AT_TARGET = new Message("cmd.select_arena.no_target_arena",
+            "There is no arena where you are targeting.");
+    public static final Message CMD_SELECT_ARENA_WORLD_UNLOADED = new Message("cmd.select_arena.world_unloaded",
+            "Cannot load WorldEdit selection for arena because world '%1' is not loaded!");
 
     public static final Message MUST_TARGET_BLOCK = new Message("general.must_target_block",
             "You must be targeting a block!");

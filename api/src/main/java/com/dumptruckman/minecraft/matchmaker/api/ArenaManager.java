@@ -17,7 +17,7 @@ public interface ArenaManager {
 
     Arena getIntersectingArena(Region region);
 
-    Arena getArenaAt(BlockVector vector);
+    Arena getArenaAt(String world, BlockVector vector);
 
     Arena newArena(String name, Region region) throws IllegalArgumentException, IOException;
     
@@ -26,4 +26,8 @@ public interface ArenaManager {
     void loadMap(Arena arena, ArenaMap map, EditSession session) throws IllegalArgumentException, IllegalStateException, DataException, IOException, MaxChangedBlocksException;
 
     boolean deleteArena(String name);
+
+    void setSelectedArena(String player, Arena arena);
+
+    Arena getSelectedArena(String player);
 }

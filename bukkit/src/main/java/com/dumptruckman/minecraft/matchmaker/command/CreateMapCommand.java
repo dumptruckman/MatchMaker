@@ -45,7 +45,7 @@ public class CreateMapCommand extends MMCommand {
             messager.normal(Language.CLIPBOARD_EMTPY, sender);
             return;
         }
-        Arena arena = plugin.getArenaManager().getArenaAt(clipboard.getOrigin().toBlockVector());
+        Arena arena = plugin.getArenaManager().getArenaAt(player.getWorld().toString(), clipboard.getOrigin().toBlockVector());
         clipboard.setOrigin(arena.getMinimumPoint());
         ArenaMap map;
         try {

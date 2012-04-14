@@ -59,7 +59,7 @@ public class LoadMapCommand extends MMCommand {
                 messager.bad(Language.MUST_TARGET_BLOCK, sender);
                 return;
             }
-            arena = plugin.getArenaManager().getArenaAt(new BlockVector(block.getX(), block.getY(), block.getZ()));
+            arena = plugin.getArenaManager().getArenaAt(player.getWorld().toString(), new BlockVector(block.getX(), block.getY(), block.getZ()));
         } else {
             arena = plugin.getArenaManager().getArena(args.get(1));
         }
